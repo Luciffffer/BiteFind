@@ -1,29 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, ScrollView, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, ScrollView, View } from 'react-native';
 
 //components
 import Filter from '../components/Filter';
+import DishOfTheDay from '../components/DishOfTheDay';
 
 const HomeScreen = ({ navigation }) => {
     return(
         <View style={styles.container}>
-            <View style={{height: 30, marginVertical: 20}}>
-                <ScrollView style={styles.filterRow} horizontal>
-                    <Filter name="Vegan" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
-                    <Filter name="Vegan" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
-                    <Filter name="Vegan" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
-                    <Filter name="Vegan" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
-                    <Filter name="Vegan" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
-                </ScrollView>
-            </View>
-            <View>
-                <View>
-                    <Text>Dish of the day</Text>
-                    <Text>Pasta Pesto</Text>
-                </View>
-                <Image source={require('../assets/images/pesto.png')}/>
-            </View>
-            <Text>Hello World!!</Text>
+            <ScrollView style={styles.filterRow} horizontal showsHorizontalScrollIndicator={false}>
+                <Filter name="Vegan" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
+                <Filter name="Dairy-free" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
+                <Filter name="Gluten-free" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
+                <Filter name="Vegetarian" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
+            </ScrollView>
+            <DishOfTheDay name="Pasta Pesto" heroImg={require('../assets/images/pesto.png')}/>
             <StatusBar/>
         </View>
     )
@@ -38,10 +29,12 @@ const styles = StyleSheet.create({
     filterRow: {
         width: "100%",
         paddingHorizontal: 15,
+        marginVertical: 20,
+        flexGrow: 0,
     },
     paragraph: {
         fontSize: 16,
-    }
+    },
 })
 
 export default HomeScreen;

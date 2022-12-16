@@ -10,10 +10,13 @@ const Stack = createNativeStackNavigator();
 
 //custom navigation theme
 const MyTheme = {
-  ...DefaultTheme,
+  dark: false,
   colors: {
     ...DefaultTheme.colors,
+    primary: "#5AA554",
     background: "#F4F4F4",
+    card: "#E1EDE0",
+    darkCard: "#172117",
   },
 };
 
@@ -30,6 +33,7 @@ export default function App() {
             fontSize: 24,
           },
           headerShadowVisible: false,
+          headerTitleAlign: "center",
         }}
       >
         <Stack.Screen 
