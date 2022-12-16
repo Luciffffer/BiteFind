@@ -8,7 +8,15 @@ import DishOfTheDay from '../components/DishOfTheDay';
 const HomeScreen = ({ navigation }) => {
     return(
         <View style={styles.container}>
-            <ScrollView style={styles.filterRow} horizontal showsHorizontalScrollIndicator={false}>
+            <ScrollView 
+                style={styles.filterRow} 
+                horizontal 
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                    paddingHorizontal: 15,
+                }}
+            >
+                {/* Find a solution for the gaps. when api is implemented and .map is used maybe pass in a is last element check and remove margin */}
                 <Filter name="Vegan" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
                 <Filter name="Dairy-free" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
                 <Filter name="Gluten-free" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
@@ -28,8 +36,7 @@ const styles = StyleSheet.create({
     },
     filterRow: {
         width: "100%",
-        paddingHorizontal: 15,
-        marginVertical: 20,
+        marginVertical: 10,
         flexGrow: 0,
     },
     paragraph: {

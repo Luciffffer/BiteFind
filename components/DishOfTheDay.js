@@ -1,6 +1,8 @@
 import { StyleSheet, Text, Image, TouchableWithoutFeedback, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
+//to do: implement shadow
+
 const DishOfTheDay = props => {
     const { colors } = useTheme(); //uses the custom theme that i set up in app.js
 
@@ -11,7 +13,9 @@ const DishOfTheDay = props => {
                     <View style={styles.dotdLeftContainer}>
                         <Text style={[styles.dotdTopLeft, { color: colors.card }]}>Dish of the day</Text>
                         <Text style={[styles.dotdH2, { color: colors.card }]}>{props.name}</Text>
-                        <Text style={[styles.btn, { color: colors.card, backgroundColor: colors.darkCard }]}>Read More</Text>
+                        <View style={[styles.btn, { backgroundColor: colors.darkCard }]}>
+                            <Text style={{ color: colors.background, fontSize: 16 }}>Read More</Text>
+                        </View>
                     </View>
                     <Image style={styles.heroImg} source={props.heroImg}/>
                 </View>
@@ -24,6 +28,7 @@ const styles = StyleSheet.create({
     dotdParentContainer: {
         width: "100%",
         paddingHorizontal: 15,
+        marginVertical: 10,
     },
     dotdContainer: {
         flexDirection: "row",
@@ -56,7 +61,6 @@ const styles = StyleSheet.create({
     btn: {
         paddingHorizontal: 15,
         paddingVertical: 3,
-        fontSize: 16,
         alignSelf: "flex-start",
         borderRadius: 10,
     }
