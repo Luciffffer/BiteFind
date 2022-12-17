@@ -22,12 +22,12 @@ const DishCard = props => {
     return (
         // <BoxShadow setting={shadowStyle}>
             <TouchableOpacity style={[styles.dishContainer, { backgroundColor: colors.card }]}>
-                <Image style={styles.image} source={require("../assets/images/pesto.png")} />
+                <Image style={styles.image} source={{uri: props.imageLink}} />
                 <View style={styles.dishTextContainer}>
-                    <Text style={styles.dishTitle} >Ratatouille</Text>
+                    <Text style={styles.dishTitle} >{props.name}</Text>
                     <View style={styles.timeContainer}>
                         <TimeIcon/>
-                        <Text style={[styles.time, { color: colors.grey }]}>25 min</Text>
+                        <Text style={[styles.time, { color: colors.grey }]}>{props.time} min</Text>
                     </View>
                     <View style={[styles.btn, { backgroundColor: colors.darkCard }]}>
                         <Text style={{ fontFamily: "Inter-Regular", color: colors.background, fontSize: 16, alignSelf: "center" }}>Read More</Text>

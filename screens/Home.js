@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, ScrollView, View } from 'react-native';
+import { StyleSheet, Text, ScrollView, FlatList, Dimensions } from 'react-native';
 
 //components
 import FilterItem from '../components/Filter';
@@ -47,6 +47,35 @@ const HomeScreen = ({ navigation }) => {
     }, [])
 
     return(
+        // <FlatList
+        //     data={dishes}
+        //     keyExtractor={item => item.id}
+        //     renderItem={({ item }) => (
+        //         <DishCard name={item.title.rendered} time={item.preparation_time} imageLink={item.image.guid} />
+        //     )}
+        //     ListHeaderComponent={
+        //         <View>
+        //             <ScrollView 
+        //             style={styles.filterRow} 
+        //             horizontal 
+        //             showsHorizontalScrollIndicator={false}
+        //             contentContainerStyle={{ //styling of child container of the scrollview component
+        //                 paddingHorizontal: 15,
+        //             }}
+        //         >
+        //             {filters.map((filter, i) => {
+        //                 let last = false;
+        //                 i + 1 === filters.length ? last = true : last;
+        //                 return <FilterItem key={filter.id} id={filter.id} name={filter.name} isLast={last}/>  
+        //             })}
+        //         </ScrollView>
+        //         </View>
+        //         <DishOfTheDay name="Pasta Pesto" heroImg={require('../assets/images/pesto.png')}/>
+        //     }
+        // >
+
+        //</FlatList>
+
         <ScrollView contentContainerStyle={styles.container}>
             <ScrollView 
                 style={styles.filterRow} 
@@ -56,7 +85,6 @@ const HomeScreen = ({ navigation }) => {
                     paddingHorizontal: 15,
                 }}
             >
-                {/* Find a solution for the gaps. when api is implemented and .map is used maybe pass in a is last element check and remove margin */}
                 {filters.map((filter, i) => {
                     let last = false;
                     i + 1 === filters.length ? last = true : last;
@@ -65,15 +93,16 @@ const HomeScreen = ({ navigation }) => {
             </ScrollView>
             <DishOfTheDay name="Pasta Pesto" heroImg={require('../assets/images/pesto.png')}/>
             <Text style={styles.title}>Dishes</Text>
-            <View style={styles.dishContainer}>
-                <DishCard/>
-                <DishCard/>
-                <DishCard/>
-                <DishCard/>
-                <DishCard/>
-                <DishCard/>
-                <DishCard/>
-            </View>
+            <FlatList //find a way to remove that damn error or another approach to doing this
+                style={{ flex: 1 }} // makes it not scrollable
+                numColumns={2}
+                columnWrapperStyle={styles.dishContainer}
+                data={dishes}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => (
+                    <DishCard name={item.title.rendered} time={item.preparation_time} imageLink={item.image.guid} />
+                )}
+            />
             <StatusBar/>
         </ScrollView>
     )
@@ -81,7 +110,6 @@ const HomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         alignItems: "center",
         justifyContent: "flex-start",
     },
@@ -98,10 +126,9 @@ const styles = StyleSheet.create({
         marginVertical: 10,        
     },
     dishContainer: {
+        width: Dimensions.get('window').width,
         paddingHorizontal: 15,
-        flexDirection: "row",
         justifyContent: "space-between",
-        flexWrap: "wrap",
     }
 })
 
