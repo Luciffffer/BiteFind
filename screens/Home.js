@@ -11,6 +11,7 @@ import headers from '../apiHeaders';
 
 const HomeScreen = ({ navigation }) => {
     const [filters, setFilters] = useState([]);
+    const [dishes, setDishes] = useState([]);
     
     const getFilters = async () => {
         try {
@@ -19,7 +20,22 @@ const HomeScreen = ({ navigation }) => {
                 "headers": headers, 
             });
             const json = await res.json();
+            json.sort((a, b) => a.id - b.id);
             setFilters(json);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const getDishes = async () => {
+        try {
+            const res = await fetch('https://lucifarian.be/wp-json/wp/v2/dishes', {
+                "method": "GET",
+                "headers": headers,
+            });
+            const json = await res.json();
+            json.sort((a, b) => a.id - b.id);
+            setDishes(json);
         } catch (err) {
             console.error(err);
         }
@@ -27,6 +43,7 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         getFilters();
+        getDishes();
     }, [])
 
     return(
@@ -40,7 +57,11 @@ const HomeScreen = ({ navigation }) => {
                 }}
             >
                 {/* Find a solution for the gaps. when api is implemented and .map is used maybe pass in a is last element check and remove margin */}
-                {filters.map((filter) => (<FilterItem key={filter.id} id={filter.id} name={filter.name} />))}
+                {filters.map((filter, i) => {
+                    let last = false;
+                    i + 1 === filters.length ? last = true : last;
+                    return <FilterItem key={filter.id} id={filter.id} name={filter.name} isLast={last}/>  
+                })}
             </ScrollView>
             <DishOfTheDay name="Pasta Pesto" heroImg={require('../assets/images/pesto.png')}/>
             <Text style={styles.title}>Dishes</Text>

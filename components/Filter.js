@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import DairyFreeSymbol from '../assets/images/icons/dairy-free-symbol.svg';
 import VegetarianSymbol from '../assets/images/icons/vegetarian-symbol.svg';
@@ -5,6 +6,8 @@ import VeganSymbol from '../assets/images/icons/vegan-symbol.svg';
 import GlutenFreeSymbol from '../assets/images/icons/gluten-free-symbol.svg';
 
 const Filter = props => {
+    const filterMargin = props.isLast === true ? null : { marginRight: 10 };
+
     // really messy code should find a better way
     const chooseSymbol = (key) => {
         switch (key) {
@@ -24,8 +27,7 @@ const Filter = props => {
     }
 
     return (
-        <TouchableOpacity style={styles.filter}>
-            {/* <Image style={{width: 20, height: 20 }} source={props.imagePath} /> */}
+        <TouchableOpacity style={[styles.filter, filterMargin]}>
             {chooseSymbol(props.id)}
             <Text style={styles.filterText}>{props.name}</Text>
         </TouchableOpacity>
@@ -41,7 +43,6 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         paddingHorizontal: 15,
         paddingVertical: 3,
-        marginRight: 10,
     },
     filterText: {
         fontFamily: "Inter-Light",
