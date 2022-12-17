@@ -12,7 +12,7 @@ const HomeScreen = ({ navigation }) => {
                 style={styles.filterRow} 
                 horizontal 
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{
+                contentContainerStyle={{ //styling of child container of the scrollview component
                     paddingHorizontal: 15,
                 }}
             >
@@ -38,9 +38,6 @@ const styles = StyleSheet.create({
         width: "100%",
         marginVertical: 10,
         flexGrow: 0,
-    },
-    paragraph: {
-        fontSize: 16,
     },
 })
 

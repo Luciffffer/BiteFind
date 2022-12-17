@@ -4,7 +4,7 @@ const Filter = props => {
     return (
         <TouchableOpacity style={styles.filter}>
             <Image style={{width: 20, height: 20, marginRight: 10}} source={props.imagePath} />
-            <Text style={styles.paragraph}>{props.name}</Text>
+            <Text style={styles.filterText}>{props.name}</Text>
         </TouchableOpacity>
     )
 }
@@ -20,6 +20,10 @@ const styles = StyleSheet.create({
         paddingVertical: 3,
         marginRight: 10,
     },
+    filterText: {
+        fontSize: 16,
+        fontFamily: "Inter-Light",
+    }
 })
 
 export default Filter;

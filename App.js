@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { Image, View, Text } from 'react-native';
+import { Image, View } from 'react-native';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -14,7 +14,9 @@ const Stack = createNativeStackNavigator();
 
 //custom fonts
 const customFonts = {
-  'Kodchasan-Bold': require('./assets/fonts/Kodchasan-Bold.ttf')
+  'Kodchasan-Bold': require('./assets/fonts/Kodchasan-Bold.ttf'),
+  'Inter-Light': require('./assets/fonts/Inter-Light.ttf'),
+  'Inter-Regular': require('./assets/fonts/Inter-Regular.ttf'),
 }
 
 //custom navigation theme
