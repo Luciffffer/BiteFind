@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { Image, View } from 'react-native';
+import { View } from 'react-native';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
 //screens
 import DetailScreen from './screens/Details';
 import HomeScreen from './screens/Home'; 
+
+//SVG icons (uses react-native-svg-transformer to convert)
+import SearchIcon from './assets/images/icons/search-icon.svg';
 
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
@@ -28,6 +31,7 @@ const MyTheme = {
     background: "#F4F4F4",
     card: "#E1EDE0",
     darkCard: "#172117",
+    grey: "#6D6D6D",
   },
 };
 
@@ -67,9 +71,8 @@ export default function App() {
               backgroundColor: "#F4F4F4",
             },
             headerTitleStyle: {
-              fontWeight: "bold",
-              fontSize: 24,
               fontFamily: "Kodchasan-Bold",
+              fontSize: 24,
             },
             headerShadowVisible: false,
             headerTitleAlign: "center",
@@ -81,7 +84,7 @@ export default function App() {
             options={{ 
               title: "BiteFind",
               headerRight: () => (
-                <Image source={require('./assets/images/icons/search-icon.png')} />
+                <SearchIcon/>
               )
             }}
           />

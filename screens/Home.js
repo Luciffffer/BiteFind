@@ -1,13 +1,36 @@
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, ScrollView, View } from 'react-native';
 
 //components
-import Filter from '../components/Filter';
+import FilterItem from '../components/Filter';
 import DishOfTheDay from '../components/DishOfTheDay';
+import DishCard from '../components/DishCard';
+
+import headers from '../apiHeaders';
 
 const HomeScreen = ({ navigation }) => {
+    const [filters, setFilters] = useState([]);
+    
+    const getFilters = async () => {
+        try {
+            const res = await fetch('https://lucifarian.be/wp-json/wp/v2/diets', {
+                "method": "GET",
+                "headers": headers, 
+            });
+            const json = await res.json();
+            setFilters(json);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    useEffect(() => {
+        getFilters();
+    }, [])
+
     return(
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
             <ScrollView 
                 style={styles.filterRow} 
                 horizontal 
@@ -17,20 +40,27 @@ const HomeScreen = ({ navigation }) => {
                 }}
             >
                 {/* Find a solution for the gaps. when api is implemented and .map is used maybe pass in a is last element check and remove margin */}
-                <Filter name="Vegan" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
-                <Filter name="Dairy-free" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
-                <Filter name="Gluten-free" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
-                <Filter name="Vegetarian" imagePath={require('../assets/images/icons/vegan-symbol.png')}/>
+                {filters.map((filter) => (<FilterItem key={filter.id} id={filter.id} name={filter.name} />))}
             </ScrollView>
             <DishOfTheDay name="Pasta Pesto" heroImg={require('../assets/images/pesto.png')}/>
+            <Text style={styles.title}>Dishes</Text>
+            <View style={styles.dishContainer}>
+                <DishCard/>
+                <DishCard/>
+                <DishCard/>
+                <DishCard/>
+                <DishCard/>
+                <DishCard/>
+                <DishCard/>
+            </View>
             <StatusBar/>
-        </View>
+        </ScrollView>
     )
 };
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
         alignItems: "center",
         justifyContent: "flex-start",
     },
@@ -39,6 +69,19 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         flexGrow: 0,
     },
+    title: {
+        fontFamily: "Kodchasan-Bold",
+        fontSize: 20,
+        alignSelf: "flex-start",
+        marginHorizontal: 15,
+        marginVertical: 10,        
+    },
+    dishContainer: {
+        paddingHorizontal: 15,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        flexWrap: "wrap",
+    }
 })
 
 export default HomeScreen;

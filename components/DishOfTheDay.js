@@ -2,22 +2,22 @@ import { StyleSheet, Text, Image, TouchableWithoutFeedback, View, Dimensions } f
 import { useTheme } from '@react-navigation/native';
 
 //had to manually fix this module. If reinstall it won't work.
-//changed "import { Svg } from 'expo'; const { Rect, Defs, LinearGradient, Stop, } = Svg;
+//changed "import { Svg } from 'expo'; const { Rect, Defs, LinearGradient, Stop, } = Svg;"
 //to "import Svg, { Rect, Defs, LinearGradient, Stop, RadialGradient, Path } from 'react-native-svg';"
 //dependency: react-native-svg
 import { BoxShadow } from 'expo-react-native-shadow'; 
 
-//to do: implement image shadow
+//to do: implement image shadow and clean up
 
 const shadowStyle = {
     width: Dimensions.get('window').width - 30,
-    height: 150,
+    height: (Dimensions.get('window').width - 30) / 2 / 120 * 100,
     color: "#172117",
     border: 4,
     radius: 20,
-    opacity: 0.2,
+    opacity: 0.25,
     x: 0,
-    y: 4,
+    y: 3,
   }
 
 const DishOfTheDay = props => {
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     heroImg: {
-        flex: 1,
+        flex: 1.1,
         borderRadius: 20,
         aspectRatio: 1.2/1,
     },
@@ -65,10 +65,9 @@ const styles = StyleSheet.create({
         position: "relative",
     },
     dotdH2: {
-        fontSize: 20,
-        fontWeight: "bold",
-        marginBottom: 7,
         fontFamily: "Kodchasan-Bold",
+        fontSize: 20,
+        marginBottom: 5,
     },
     dotdTopLeft: {
         position: "absolute",
