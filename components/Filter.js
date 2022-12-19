@@ -1,16 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { useTheme } from '@react-navigation/native';
+
+//SVGs
 import DairyFreeSymbol from '../assets/images/icons/dairy-free-symbol.svg';
 import VegetarianSymbol from '../assets/images/icons/vegetarian-symbol.svg';
 import VeganSymbol from '../assets/images/icons/vegan-symbol.svg';
 import GlutenFreeSymbol from '../assets/images/icons/gluten-free-symbol.svg';
 
 const Filter = props => {
+    const { colors } = useTheme();
     const filterMargin = props.isLast === true ? null : { marginRight: 10 };
+    const [isActive, setIsActive] = useState(false);
 
     // really messy code should find a better way
-    const chooseSymbol = (key) => {
-        switch (key) {
+    const chooseSymbol = (id) => {
+        switch (id) {
             case 4:
                 return <DairyFreeSymbol width="20" height="20" />
                 break;
@@ -26,10 +31,22 @@ const Filter = props => {
         }
     }
 
+    const handleFilterPress = () => {
+        setIsActive((prev) => !prev);
+        props.onFilterPress(props.id, !isActive);
+    }
+
     return (
-        <TouchableOpacity style={[styles.filter, filterMargin]}>
+        <TouchableOpacity style={[
+            styles.filter, 
+            filterMargin, 
+            isActive === true ? { backgroundColor: colors.darkCard } : null
+        ]} onPress={handleFilterPress}>
             {chooseSymbol(props.id)}
-            <Text style={styles.filterText}>{props.name}</Text>
+            <Text style={[
+                styles.filterText, 
+                isActive === true ? { color: colors.background } : null
+            ]}>{props.name}</Text>
         </TouchableOpacity>
     )
 }

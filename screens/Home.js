@@ -12,6 +12,7 @@ import { headers } from '../apiHeaders';
 const HomeScreen = ({ navigation }) => {
     const [filters, setFilters] = useState([]);
     const [dishes, setDishes] = useState([]);
+    const [activeFilters, setActiveFilters] = useState([]);
     
     const getFilters = async () => {
         try {
@@ -27,9 +28,18 @@ const HomeScreen = ({ navigation }) => {
         }
     }
 
-    const getDishes = async () => {
+    const getDishes = async (diets) => {
         try {
-            const res = await fetch('https://lucifarian.be/wp-json/wp/v2/dishes', {
+            let url = 'https://lucifarian.be/wp-json/wp/v2/dishes';
+            if (diets.length !== 0) {
+                url = url + '?diets=';
+                diets.forEach(id => {
+                    url = url + `${id}+`;
+                });
+            }
+            console.log(url);
+
+            const res = await fetch(url, {
                 "method": "GET",
                 "headers": headers,
             });
@@ -43,8 +53,21 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         getFilters();
-        getDishes();
     }, [])
+
+    const onFilterPress = (id, active) => {
+        if (active) {
+            setActiveFilters((prev) => [...prev, id]);
+        } else if (!active) {
+            let newArray = [...activeFilters];
+            newArray.splice(newArray.indexOf(id), 1)
+            setActiveFilters([...newArray]); 
+        }
+    }
+
+    useEffect(() => {
+        getDishes(activeFilters);
+    }, [activeFilters])
 
     return(
         // <FlatList
@@ -85,11 +108,15 @@ const HomeScreen = ({ navigation }) => {
                     paddingHorizontal: 15,
                 }}
             >
-                {filters.map((filter, i) => {
-                    let last = false;
-                    i + 1 === filters.length ? last = true : last;
-                    return <FilterItem key={filter.id} id={filter.id} name={filter.name} isLast={last}/>  
-                })}
+                {filters.map((filter, i) => (
+                    <FilterItem 
+                        key={filter.id} 
+                        id={filter.id} 
+                        name={filter.name} 
+                        isLast={i + 1 === filters.length ? true : false}
+                        onFilterPress={onFilterPress}
+                    />  
+                ))}
             </ScrollView>
             <DishOfTheDay name="Pasta Pesto" heroImg={require('../assets/images/pesto.png')}/>
             <Text style={styles.title}>Dishes</Text>
@@ -100,7 +127,13 @@ const HomeScreen = ({ navigation }) => {
                 data={dishes}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) => (
-                    <DishCard name={item.title.rendered} time={item.preparation_time} imageLink={item.image.guid} />
+                    <DishCard 
+                        id={item.id}
+                        name={item.title.rendered} 
+                        time={item.preparation_time} 
+                        imageLink={item.image.guid} 
+                        onSelectDish={(selectedId) => { navigation.navigate('Details', { dishId: selectedId, filters: filters }) }}
+                    />
                 )}
             />
             <StatusBar/>

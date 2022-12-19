@@ -1,7 +1,7 @@
 const username = 'lucifer';
 const applicationPassword = 'BB9W QOYA VHZJ 21uW bKEM Mu02';
 
-let headers;
+let headers = new Headers();
 
 const getHeaders = async () => {
     try {
@@ -10,11 +10,8 @@ const getHeaders = async () => {
             "method": "POST"
         });
         const json = await res.json();
-        console.log(json);
 
-        const newHeaders = new Headers();
-        newHeaders.append('Authorization', `Bearer ${json.token}`);
-        headers = newHeaders;
+        headers.append('Authorization', `Bearer ${json.token}`);
     } catch (err) {
         console.error(err);
     }

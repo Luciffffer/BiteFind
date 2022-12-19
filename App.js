@@ -11,6 +11,7 @@ import HomeScreen from './screens/Home';
 
 //SVG icons (uses react-native-svg-transformer to convert)
 import SearchIcon from './assets/images/icons/search-icon.svg';
+import HeartIcon from './assets/images/icons/heart-icon.svg';
 
 import { getHeaders } from './apiHeaders';
 
@@ -86,12 +87,17 @@ export default function App() {
             component={HomeScreen}
             options={{ 
               title: "BiteFind",
-              headerRight: () => (
-                <SearchIcon/>
-              )
+              headerRight: () => <SearchIcon/>
             }}
           />
-          <Stack.Screen name="Details" component={DetailScreen} />
+          <Stack.Screen 
+            name="Details" 
+            component={DetailScreen} 
+            options={{
+              headerRight: () => <HeartIcon/>,
+              title: "Dish"
+            }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </View>

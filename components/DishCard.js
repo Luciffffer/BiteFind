@@ -6,7 +6,7 @@ import { BoxShadow } from 'expo-react-native-shadow';
 import TimeIcon from '../assets/images/icons/time-icon.svg'
 
 const shadowStyle = {
-    width: 180,
+    width: (Dimensions.get('window').width - 45) / 2,
     height: 300,
     color: "#172117",
     border: 4,
@@ -14,20 +14,36 @@ const shadowStyle = {
     opacity: 0.2,
     x: 0,
     y: 4,
-  }
+}
+
+const imageShadowStyle = {
+    width: (Dimensions.get('window').width - 45) / 2,
+    height: (Dimensions.get('window').width - 45) / 2 / 100 * 90,
+    color: "#172117",
+    border: 4,
+    radius: 10,
+    opacity: 0.2,
+    x: 0,
+    y: 3,
+}
 
 const DishCard = props => {
     const { colors } = useTheme();
 
     return (
         // <BoxShadow setting={shadowStyle}>
-            <TouchableOpacity style={[styles.dishContainer, { backgroundColor: colors.card }]}>
-                <Image style={styles.image} source={{uri: props.imageLink}} />
+            <TouchableOpacity 
+                style={[styles.dishContainer, { backgroundColor: colors.card }]}
+                onPress={() => props.onSelectDish(props.id)}
+            >
+                <BoxShadow setting={imageShadowStyle}><Image style={styles.image} source={{uri: props.imageLink}} /></BoxShadow>
                 <View style={styles.dishTextContainer}>
-                    <Text style={styles.dishTitle} >{props.name}</Text>
-                    <View style={styles.timeContainer}>
-                        <TimeIcon/>
-                        <Text style={[styles.time, { color: colors.grey }]}>{props.time} min</Text>
+                    <View>
+                        <Text style={styles.dishTitle} >{props.name}</Text>
+                        <View style={styles.timeContainer}>
+                            <TimeIcon/>
+                            <Text style={[styles.time, { color: colors.grey }]}>{props.time} min</Text>
+                        </View>
                     </View>
                     <View style={[styles.btn, { backgroundColor: colors.darkCard }]}>
                         <Text style={{ fontFamily: "Inter-Regular", color: colors.background, fontSize: 16, alignSelf: "center" }}>Read More</Text>
@@ -48,7 +64,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: "100%",
-        height: 150,
+        aspectRatio: 1/0.9,
         borderRadius: 10,
     },
     dishTitle: {
@@ -58,6 +74,7 @@ const styles = StyleSheet.create({
     },
     dishTextContainer: {
         padding: 10,
+        justifyContent: "space-between",
     },
     timeContainer: {
         flexDirection: "row",

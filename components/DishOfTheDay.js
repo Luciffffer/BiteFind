@@ -18,7 +18,18 @@ const shadowStyle = {
     opacity: 0.25,
     x: 0,
     y: 3,
-  }
+}
+
+const imageShadowStyle = {
+    width: (Dimensions.get('window').width - 30) / 2,
+    height: (Dimensions.get('window').width - 30) / 2 / 120 * 100,
+    color: "#172117",
+    border: 4,
+    radius: 20,
+    opacity: 0.25,
+    x: -3,
+    y: 0,
+}
 
 const DishOfTheDay = props => {
     const { colors } = useTheme(); //uses the custom theme that i set up in app.js
@@ -35,7 +46,7 @@ const DishOfTheDay = props => {
                                 <Text style={{ color: colors.background, fontSize: 16, fontFamily: "Inter-Regular" }}>Read More</Text>
                             </View>
                         </View>
-                        <Image style={styles.heroImg} source={props.heroImg}/>
+                        <BoxShadow setting={imageShadowStyle}><Image style={styles.heroImg} source={props.heroImg}/></BoxShadow>
                     </View>
                 </TouchableWithoutFeedback>
             </BoxShadow>
@@ -54,7 +65,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     heroImg: {
-        flex: 1.1,
+        flex: 1,
         borderRadius: 20,
         aspectRatio: 1.2/1,
     },
