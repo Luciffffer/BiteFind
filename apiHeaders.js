@@ -1,10 +1,23 @@
-const base64 = require('base-64');
-
 const username = 'lucifer';
 const applicationPassword = 'BB9W QOYA VHZJ 21uW bKEM Mu02';
 
-const headers = new Headers();
+let headers;
 
-headers.set('Authorization', 'Basic ' + base64.encode(username + ":" + applicationPassword));
+const getHeaders = async () => {
+    try {
+        const url = `https://lucifarian.be/wp-json/jwt-auth/v1/token?username=${username}&password=${applicationPassword}`;
+        const res = await fetch(url, {
+            "method": "POST"
+        });
+        const json = await res.json();
+        console.log(json);
 
-export default headers;
+        const newHeaders = new Headers();
+        newHeaders.append('Authorization', `Bearer ${json.token}`);
+        headers = newHeaders;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+export { getHeaders, headers };

@@ -12,6 +12,8 @@ import HomeScreen from './screens/Home';
 //SVG icons (uses react-native-svg-transformer to convert)
 import SearchIcon from './assets/images/icons/search-icon.svg';
 
+import { getHeaders } from './apiHeaders';
+
 SplashScreen.preventAutoHideAsync();
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +44,7 @@ export default function App() {
     async function prepare() {
       try {
         await Font.loadAsync(customFonts);
+        await getHeaders();
       } catch (err) {
         console.warn(err);
       } finally {

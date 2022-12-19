@@ -7,7 +7,7 @@ import FilterItem from '../components/Filter';
 import DishOfTheDay from '../components/DishOfTheDay';
 import DishCard from '../components/DishCard';
 
-import headers from '../apiHeaders';
+import { headers } from '../apiHeaders';
 
 const HomeScreen = ({ navigation }) => {
     const [filters, setFilters] = useState([]);
