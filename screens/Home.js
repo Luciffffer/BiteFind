@@ -9,43 +9,35 @@ import DishCard from '../components/DishCard';
 
 import { headers } from '../apiHeaders';
 
+let dishes = [];
+
 const HomeScreen = ({ navigation }) => {
     const [filters, setFilters] = useState([]);
-    const [dishes, setDishes] = useState([]);
+    const [displayedDishes, setDisplayedDishes] = useState([]);
     const [activeFilters, setActiveFilters] = useState([]);
     
     const getFilters = async () => {
         try {
-            const res = await fetch('https://lucifarian.be/wp-json/wp/v2/diets', {
+            const res = await fetch('https://lucifarian.be/wp-json/wp/v2/diets?orderby=id&order=asc', {
                 "method": "GET",
                 "headers": headers, 
             });
             const json = await res.json();
-            json.sort((a, b) => a.id - b.id);
             setFilters(json);
         } catch (err) {
             console.error(err);
         }
     }
 
-    const getDishes = async (diets) => {
+    const getDishes = async () => {
         try {
-            let url = 'https://lucifarian.be/wp-json/wp/v2/dishes';
-            if (diets.length !== 0) {
-                url = url + '?diets=';
-                diets.forEach(id => {
-                    url = url + `${id}+`;
-                });
-            }
-            console.log(url);
-
-            const res = await fetch(url, {
+            const res = await fetch('https://lucifarian.be/wp-json/wp/v2/dishes?orderby=id&order=asc', {
                 "method": "GET",
                 "headers": headers,
             });
             const json = await res.json();
-            json.sort((a, b) => a.id - b.id);
-            setDishes(json);
+            dishes = json;
+            setDisplayedDishes(dishes);
         } catch (err) {
             console.error(err);
         }
@@ -53,6 +45,7 @@ const HomeScreen = ({ navigation }) => {
 
     useEffect(() => {
         getFilters();
+        getDishes();
     }, [])
 
     const onFilterPress = (id, active) => {
@@ -66,7 +59,22 @@ const HomeScreen = ({ navigation }) => {
     }
 
     useEffect(() => {
-        getDishes(activeFilters);
+        // WP REST api has no AND operator option when you do taxonomy filter requests so dishes/diets=3+4 returns all dishes with either diet 3 or diet 4
+        // this is really stupid and since they removed the filter parameter i can't even bypass it with %2B instead of a +
+        // I thus have to make a check to see which dishes have certain diets myself. Thank you for listening to my rant (:
+        if (activeFilters.length !== 0) {
+            let newArray = [];
+            
+            dishes.forEach(dish => {
+                if (activeFilters.every(activeFilter => dish.diets.includes(activeFilter))) {
+                    newArray.push(dish);
+                }
+            })
+
+            setDisplayedDishes([...newArray]);
+        } else {
+            setDisplayedDishes([...dishes]);
+        }
     }, [activeFilters])
 
     return(
@@ -124,7 +132,7 @@ const HomeScreen = ({ navigation }) => {
                 style={{ flex: 1 }} // makes it not scrollable
                 numColumns={2}
                 columnWrapperStyle={styles.dishContainer}
-                data={dishes}
+                data={displayedDishes}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) => (
                     <DishCard 
