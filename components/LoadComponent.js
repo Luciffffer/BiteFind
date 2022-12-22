@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
         height: 10,
         overflow: "hidden",
         position: "relative",
+        borderRadius: 200,
     }
 })
 

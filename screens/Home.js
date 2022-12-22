@@ -1,11 +1,16 @@
-import { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, ScrollView, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, Text, ScrollView, FlatList, Dimensions, TextInput } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 
 //components
+import Filters from '../components/Filters';
 import FilterItem from '../components/Filter';
 import DishOfTheDay from '../components/DishOfTheDay';
 import DishCard from '../components/DishCard';
+
+//SVGs
+import SearchIcon from '../assets/images/icons/search-icon.svg'
 
 import { headers } from '../apiHeaders';
 
@@ -14,12 +19,15 @@ const HomeScreen = ({ navigation }) => {
     const [dishes, setDishes] = useState([]);
     const [dishOfTheDay, setDishOfTheDay] = useState(null);
     const [activeFilters, setActiveFilters] = useState([]);
+    const [displaySearch, setDisplaySearch] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
+    const { colors } = useTheme();
     
     const filteredDishes = useMemo(() => {
         // WP REST api has no AND operator option when you do taxonomy filter requests so dishes/diets=3+4 returns all dishes with either diet 3 or diet 4
         // this is really stupid and since they removed the filter parameter i can't even bypass it with %2B instead of a +
         // wordpress just is the absolute worst
-        // I thus have to make a check to see which dishes have certain diets myself. Thank you for listening to my rant (:        
+        // I thus have to make a manual check to see which dishes have certain diets myself. Thank you for listening to my rant (:        
 
         // Best solution i could find because app has multiple filters. It does cause lag. cuz u know for loops
         return dishes.filter(dish => (
@@ -62,16 +70,21 @@ const HomeScreen = ({ navigation }) => {
     useEffect(() => {
         getFilters();
         getDishes();
+
+        navigation.setOptions({
+            headerRight: () => (
+                <SearchIcon onPress={() => setDisplaySearch(prev => !prev)} />
+            )
+        })
     }, [])
 
-    const onFilterPress = (id, active) => {
-        if (active) {
-            setActiveFilters((prev) => [...prev, id]);
-        } else if (!active) {
-            let newArray = [...activeFilters];
-            newArray.splice(newArray.indexOf(id), 1)
-            setActiveFilters([...newArray]); 
-        }
+    const handleSearchChange = enteredText => {
+        setSearchValue(enteredText);
+    }
+
+    const handleSearchSumbit = () => {
+        console.log(searchValue);
+        setSearchValue('');
     }
 
     return(
@@ -105,30 +118,23 @@ const HomeScreen = ({ navigation }) => {
         //</FlatList>
 
         <ScrollView contentContainerStyle={styles.container}>
-            <ScrollView 
-                style={styles.filterRow} 
-                horizontal 
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ //styling of child container of the scrollview component
-                    paddingHorizontal: 15,
-                }}
-            >
-                {filters.map((filter, i) => (
-                    <FilterItem 
-                        key={filter.id} 
-                        id={filter.id} 
-                        name={filter.name} 
-                        isLast={i + 1 === filters.length ? true : false}
-                        onFilterPress={onFilterPress}
-                    />  
-                ))}
-            </ScrollView>
+            {displaySearch === true? <TextInput 
+                onSubmitEditing={handleSearchSumbit}
+                onChangeText={handleSearchChange}
+                style={[styles.searchInput, { backgroundColor: colors.card, borderColor: colors.grey }]} 
+                placeholder="search"
+                value={searchValue}
+            /> : null}
+
+            <Filters setActiveFilters={setActiveFilters} filters={filters} activeFilters={activeFilters} />
+
             {dishOfTheDay !== null ? <DishOfTheDay 
                 id={dishOfTheDay.id}
                 name={dishOfTheDay.title.rendered} 
                 heroImg={dishOfTheDay.image.guid} 
                 onSelectDish={(selectedId) => { navigation.navigate('Details', { dishId: selectedId, filters: filters }) }}
             /> : null}
+
             <Text style={styles.title}>Dishes</Text>
             <FlatList //find a way to remove that damn error or another approach to doing this
                 style={{ flex: 1 }} // makes it not scrollable
@@ -156,11 +162,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "flex-start",
     },
-    filterRow: {
-        width: "100%",
-        marginVertical: 10,
-        flexGrow: 0,
-    },
     title: {
         fontFamily: "Kodchasan-Bold",
         fontSize: 20,
@@ -172,6 +173,15 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         paddingHorizontal: 15,
         justifyContent: "space-between",
+    },
+    searchInput: {
+        width: "100%",
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        fontSize: 16,
+        fontFamily: "Inter-Regular",
+        marginBottom: 10,
+        borderBottomWidth: 1,
     }
 })
 

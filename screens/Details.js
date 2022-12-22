@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView, Image, Dimensions } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { BoxShadow } from 'expo-react-native-shadow';
 
 import { headers } from '../apiHeaders';
-import LoadComponent from '../components/Loading';
+import LoadComponent from '../components/LoadComponent';
 
 // SVGs
 import ProteinIcon from '../assets/images/icons/protein-icon.svg';
@@ -23,9 +23,17 @@ const shadowStyle = {
 
 const DetailScreen = ({ navigation, route }) => {
     const [screenIsReady, setScreenIsReady] = useState(false);
-    const [dish, setDish] = useState([]);
+    const [dish, setDish] = useState(null);
     const { dishId, filters } = route.params;
     const { colors } = useTheme();
+
+    const filteredFilters = useMemo(() => { // not entirely happy with this
+        if (dish !== null) {
+            return filters.filter(filter => dish.diets.includes(filter.id));
+        } else {
+            return null;
+        }
+    }, [dish])
 
     const getDish = async () => {
         try {
@@ -74,9 +82,7 @@ const DetailScreen = ({ navigation, route }) => {
                         <Text style={styles.paragraph}>{dish.calorie_count} Kcal</Text>
                     </View>
 
-                    {dish.diets.map((item) => {
-                        console.log(item);
-                    })}
+                    {filteredFilters.map(item => <Text>{item.name}</Text>)}
 
                     <View style={styles.nutritionItemContainer}>
                         <View style={[styles.nutritionIcon, { backgroundColor: colors.card}]}>
