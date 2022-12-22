@@ -1,4 +1,4 @@
-import { StyleSheet, Text, Image, TouchableWithoutFeedback, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, Image, View, Dimensions, TouchableOpacity } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
 //had to manually fix this module. If reinstall it won't work.
@@ -37,7 +37,7 @@ const DishOfTheDay = props => {
     return (
         <View style={styles.dotdParentContainer}>
             <BoxShadow setting={shadowStyle}>
-                <TouchableWithoutFeedback>
+                <TouchableOpacity onPress={() => props.onSelectDish(props.id)}>
                     <View style={[styles.dotdContainer, { backgroundColor: colors.primary }]}>
                         <View style={styles.dotdLeftContainer}>
                             <Text style={[styles.dotdTopLeft, { color: colors.card }]}>Dish of the day</Text>
@@ -46,9 +46,9 @@ const DishOfTheDay = props => {
                                 <Text style={{ color: colors.background, fontSize: 16, fontFamily: "Inter-Regular" }}>Read More</Text>
                             </View>
                         </View>
-                        <BoxShadow setting={imageShadowStyle}><Image style={styles.heroImg} source={props.heroImg}/></BoxShadow>
+                        <BoxShadow setting={imageShadowStyle}><Image style={styles.heroImg} source={{uri: props.heroImg}}/></BoxShadow>
                     </View>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
             </BoxShadow>
         </View>
     )

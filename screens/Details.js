@@ -4,6 +4,7 @@ import { useTheme } from '@react-navigation/native';
 import { BoxShadow } from 'expo-react-native-shadow';
 
 import { headers } from '../apiHeaders';
+import LoadComponent from '../components/Loading';
 
 // SVGs
 import ProteinIcon from '../assets/images/icons/protein-icon.svg';
@@ -54,7 +55,7 @@ const DetailScreen = ({ navigation, route }) => {
     }, [])
 
     if (!screenIsReady) {
-        return null;
+        return <LoadComponent/>;
     };
 
     return (
