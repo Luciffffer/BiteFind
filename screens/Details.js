@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, Dimensions, TouchableHighlight } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { BoxShadow } from 'expo-react-native-shadow';
 
 import { headers } from '../apiHeaders';
 import LoadComponent from '../components/LoadComponent';
+import IngrOrRecipe from '../components/IngrOrRecipe';
+import DietSymbol from '../components/DietSymbol';
 
 // SVGs
 import ProteinIcon from '../assets/images/icons/protein-icon.svg';
@@ -74,6 +76,16 @@ const DetailScreen = ({ navigation, route }) => {
             <View style={styles.informationContainer}>
                 <Text style={styles.h1}>{dish.title.rendered}</Text>
                 <Text style={styles.paragraph}>{dish.description}</Text>
+
+                <View style={styles.dietsContainer}>
+                    {filteredFilters.map((item, i) => (
+                        <View key={i} style={styles.dietContainer}>
+                            <DietSymbol id={item.id} height="30" />
+                            <Text style={[styles.paragraph, { marginLeft: 10 }]}>{item.name}</Text>
+                        </View>
+                    ))}
+                </View>
+
                 <View style={styles.nutritionContainer}>
                     <View style={styles.nutritionItemContainer}>
                         <View style={[styles.nutritionIcon, { backgroundColor: colors.card}]}>
@@ -82,8 +94,6 @@ const DetailScreen = ({ navigation, route }) => {
                         <Text style={styles.paragraph}>{dish.calorie_count} Kcal</Text>
                     </View>
 
-                    {filteredFilters.map(item => <Text>{item.name}</Text>)}
-
                     <View style={styles.nutritionItemContainer}>
                         <View style={[styles.nutritionIcon, { backgroundColor: colors.card}]}>
                             <ProteinIcon/>
@@ -91,6 +101,11 @@ const DetailScreen = ({ navigation, route }) => {
                         <Text style={styles.paragraph}>{dish.protein_count}g Proteins</Text>
                     </View>
                 </View>
+
+                <IngrOrRecipe
+                    dish={dish}
+                    options={['Ingredients', 'Recipe']}
+                />
             </View>
         </ScrollView>
     )
@@ -118,7 +133,7 @@ const styles = StyleSheet.create({
     nutritionContainer: {
         flexDirection: "row",
         justifyContent: "space-around",
-        marginVertical: 20,
+        marginBottom: 20,
     },
     nutritionIcon: {
         padding: 10,
@@ -131,6 +146,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
         width: "45%",
     },
+    dietContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+    },
+    dietsContainer: {
+        flexDirection: "row",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        marginVertical: 20,
+    }
 })
 
 export default DetailScreen;

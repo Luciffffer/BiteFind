@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, ScrollView, FlatList, Dimensions, TextInput } from 'react-native';
+import { StyleSheet, Text, ScrollView, FlatList, Dimensions, TextInput, TouchableOpacity } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 
 //components
 import Filters from '../components/Filters';
-import FilterItem from '../components/Filter';
 import DishOfTheDay from '../components/DishOfTheDay';
 import DishCard from '../components/DishCard';
 
@@ -19,6 +18,7 @@ const HomeScreen = ({ navigation }) => {
     const [dishes, setDishes] = useState([]);
     const [dishOfTheDay, setDishOfTheDay] = useState(null);
     const [activeFilters, setActiveFilters] = useState([]);
+    
     const [displaySearch, setDisplaySearch] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const { colors } = useTheme();
@@ -29,7 +29,7 @@ const HomeScreen = ({ navigation }) => {
         // wordpress just is the absolute worst
         // I thus have to make a manual check to see which dishes have certain diets myself. Thank you for listening to my rant (:        
 
-        // Best solution i could find because app has multiple filters. It does cause lag. cuz u know for loops
+        // Best solution i could find because app has multiple filters. It does cause a little lag. cuz u know for loops
         return dishes.filter(dish => (
             activeFilters.every(activeFilters => dish.diets.includes(activeFilters))
         ))
@@ -73,7 +73,9 @@ const HomeScreen = ({ navigation }) => {
 
         navigation.setOptions({
             headerRight: () => (
-                <SearchIcon onPress={() => setDisplaySearch(prev => !prev)} />
+                <TouchableOpacity onPress={() => setDisplaySearch(prev => !prev)} >
+                    <SearchIcon/>
+                </TouchableOpacity>
             )
         })
     }, [])
@@ -82,41 +84,22 @@ const HomeScreen = ({ navigation }) => {
         setSearchValue(enteredText);
     }
 
-    const handleSearchSumbit = () => {
-        console.log(searchValue);
-        setSearchValue('');
+    const handleSearchSumbit = async () => { // Ye I know im repeating a lot of fetch code and i should probably make a basic fetch function that adapts to different scenarions but i dont have enough time
+        try {
+            const url = `https://lucifarian.be/wp-json/wp/v2/dishes?orderby=id&order=asc&search=${searchValue}`;
+    
+            const res = await fetch(url, {
+                "method": "GET",
+                "headers": headers,
+            });
+            const json = await res.json();
+            setDishes(json);
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     return(
-        // <FlatList
-        //     data={dishes}
-        //     keyExtractor={item => item.id}
-        //     renderItem={({ item }) => (
-        //         <DishCard name={item.title.rendered} time={item.preparation_time} imageLink={item.image.guid} />
-        //     )}
-        //     ListHeaderComponent={
-        //         <View>
-        //             <ScrollView 
-        //             style={styles.filterRow} 
-        //             horizontal 
-        //             showsHorizontalScrollIndicator={false}
-        //             contentContainerStyle={{ //styling of child container of the scrollview component
-        //                 paddingHorizontal: 15,
-        //             }}
-        //         >
-        //             {filters.map((filter, i) => {
-        //                 let last = false;
-        //                 i + 1 === filters.length ? last = true : last;
-        //                 return <FilterItem key={filter.id} id={filter.id} name={filter.name} isLast={last}/>  
-        //             })}
-        //         </ScrollView>
-        //         </View>
-        //         <DishOfTheDay name="Pasta Pesto" heroImg={require('../assets/images/pesto.png')}/>
-        //     }
-        // >
-
-        //</FlatList>
-
         <ScrollView contentContainerStyle={styles.container}>
             {displaySearch === true? <TextInput 
                 onSubmitEditing={handleSearchSumbit}
