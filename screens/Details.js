@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, Dimensions, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, Dimensions, TouchableHighlight, TouchableOpacity, AppRegistry } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { BoxShadow } from 'expo-react-native-shadow';
 
@@ -11,6 +11,8 @@ import DietSymbol from '../components/DietSymbol';
 // SVGs
 import ProteinIcon from '../assets/images/icons/protein-icon.svg';
 import CalorieIcon from '../assets/images/icons/calorie-icon.svg';
+import HeartIcon from '../assets/images/icons/heart-icon.svg';
+import MenuHeartIcon from '../assets/images/icons/menu-heart-icon.svg';
 
 const shadowStyle = {
     width: Dimensions.get('window').width,
@@ -26,6 +28,7 @@ const shadowStyle = {
 const DetailScreen = ({ navigation, route }) => {
     const [screenIsReady, setScreenIsReady] = useState(false);
     const [dish, setDish] = useState(null);
+    const [favourite, setFavourite] = useState(false);
     const { dishId, filters } = route.params;
     const { colors } = useTheme();
 
@@ -45,10 +48,44 @@ const DetailScreen = ({ navigation, route }) => {
             });
             const json = await res.json();
             setDish(json);
+
+            if (route.params.favourites.includes(json.id)) {
+                setFavourite(true);
+            }
         } catch (err) {
             console.error(err);
         }
     }
+
+    const handleFavouritePress = () => {
+        if (!favourite) {
+            route.params.favourites.push(dish.id);
+        } else if (favourite) {
+            route.params.favourites.splice(route.params.favourites.indexOf(dish.id), 1);
+        }
+
+        setFavourite((prev) => !prev);
+    }
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => {
+                if (!favourite) {
+                    return (
+                        <TouchableOpacity onPress={handleFavouritePress}>
+                            <HeartIcon width="30" height="30" />
+                        </TouchableOpacity>
+                    )
+                } else if (favourite) {
+                    return (
+                        <TouchableOpacity onPress={handleFavouritePress}>
+                            <MenuHeartIcon width="30" height="30" fill="red"/>
+                        </TouchableOpacity>
+                    )
+                }
+            }
+        });
+    }, [dish, favourite])
 
     useEffect(() => {
         const prepare = async () => {
@@ -65,7 +102,7 @@ const DetailScreen = ({ navigation, route }) => {
     }, [])
 
     if (!screenIsReady) {
-        return <LoadComponent/>;
+        return <LoadComponent/>; //The Loadscreen doesn't actually match the load progress. It's just a lil thing to better the user experience.
     };
 
     return (

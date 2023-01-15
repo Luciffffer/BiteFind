@@ -1,23 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { View } from 'react-native';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
-//screens
-import DetailScreen from './screens/Details';
-import HomeScreen from './screens/Home'; 
-
-//SVG icons (uses react-native-svg-transformer to convert)
-import SearchIcon from './assets/images/icons/search-icon.svg';
-import HeartIcon from './assets/images/icons/heart-icon.svg';
-
 import { getHeaders } from './apiHeaders';
+import HomeStackScreen from './screens/HomeStackScreen';
+import FavouritesScreen from './screens/FavouritesScreen';
+
+// SVGs
+import HomeIcon from './assets/images/icons/home-icon.svg';
+import HeartIcon from './assets/images/icons/menu-heart-icon.svg';
 
 SplashScreen.preventAutoHideAsync();
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 //custom fonts
 const customFonts = {
@@ -41,6 +38,7 @@ const MyTheme = {
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
+  let favourites = [];
 
   useEffect(() => {
     async function prepare() {
@@ -70,36 +68,40 @@ export default function App() {
   return (
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <NavigationContainer theme={MyTheme} >
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: {
+        <Tab.Navigator 
+          screenOptions={({ route }) => ({ 
+            headerShown: false,
+            tabBarIcon: ({ color, size }) => {
+              if (route.name === 'HomeStack') {
+                return <HomeIcon width={size} height={size} fill={color}/>
+              } else if (route.name === 'Favourites') {
+                return <HeartIcon width={size} height={size} fill={color}/>
+              }
+            },
+            tabBarInactiveTintColor: '#6D6D6D',
+            tabBarStyle: {
               backgroundColor: "#F4F4F4",
-            },
-            headerTitleStyle: {
-              fontFamily: "Kodchasan-Bold",
-              fontSize: 24,
-            },
-            headerShadowVisible: false,
-            headerTitleAlign: "center",
-          }}
+            }
+          })}
         >
-          <Stack.Screen 
-            name="Home" 
-            component={HomeScreen}
-            options={{ 
-              title: "BiteFind",
-              headerRight: () => <SearchIcon/>
+          <Tab.Screen 
+            name='HomeStack' 
+            component={HomeStackScreen}
+            options={() => ({
+              title: "Home"
+            })}
+            initialParams={{
+              favourites: favourites,
             }}
           />
-          <Stack.Screen 
-            name="Details" 
-            component={DetailScreen} 
-            options={{
-              headerRight: () => <HeartIcon/>,
-              title: "Dish"
+          <Tab.Screen 
+            name='Favourites' 
+            component={FavouritesScreen} 
+            initialParams={{
+              favourites: favourites,
             }}
           />
-        </Stack.Navigator>
+        </Tab.Navigator>
       </NavigationContainer>
     </View>
   );

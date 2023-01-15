@@ -11,9 +11,10 @@ const IngrOrRecipe = props => {
     return (
         <View>
             <View style={[styles.selectorsContainer, { backgroundColor: colors.card }]}>
-                {props.options.map(item => (
+                {props.options.map((item, i) => (
                     <Selector 
                         name={item}
+                        key={i}
                         active={showIngrOrRecipe === item ? true : false}
                         onSelect={(name) => setShowIngrOrRecipe(name)}
                     />

@@ -2,8 +2,7 @@ import { StyleSheet, TouchableOpacity, Text, Image, View, Dimensions } from "rea
 import { useTheme } from '@react-navigation/native';
 import { BoxShadow } from 'expo-react-native-shadow';
 
-//SVGs
-import TimeIcon from '../assets/images/icons/time-icon.svg'
+import PreparationTime from "./PreparationTime";
 
 const shadowStyle = {
     width: (Dimensions.get('window').width - 45) / 2,
@@ -40,10 +39,7 @@ const DishCard = props => {
                 <View style={styles.dishTextContainer}>
                     <View>
                         <Text style={styles.dishTitle} >{props.name}</Text>
-                        <View style={styles.timeContainer}>
-                            <TimeIcon/>
-                            <Text style={[styles.time, { color: colors.grey }]}>{props.time} min</Text>
-                        </View>
+                        <PreparationTime time={props.time} />
                     </View>
                     <View style={[styles.btn, { backgroundColor: colors.darkCard }]}>
                         <Text style={{ fontFamily: "Inter-Regular", color: colors.background, fontSize: 16, alignSelf: "center" }}>Read More</Text>
@@ -75,15 +71,6 @@ const styles = StyleSheet.create({
     dishTextContainer: {
         padding: 10,
         justifyContent: "space-between",
-    },
-    timeContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-    },
-    time: {
-        fontFamily: "Inter-Light",
-        fontSize: 16,
-        marginLeft: 10,
     },
     btn: {
         width: "100%",
