@@ -33,7 +33,7 @@ const DetailScreen = ({ navigation, route }) => {
     const { colors } = useTheme();
 
     const filteredFilters = useMemo(() => { // not entirely happy with this
-        if (dish !== null) {
+        if (dish !== null && filters !== undefined) {
             return filters.filter(filter => dish.diets.includes(filter.id));
         } else {
             return null;
@@ -114,14 +114,16 @@ const DetailScreen = ({ navigation, route }) => {
                 <Text style={styles.h1}>{dish.title.rendered}</Text>
                 <Text style={styles.paragraph}>{dish.description}</Text>
 
-                <View style={styles.dietsContainer}>
+                {filters !== undefined ?
+                    <View style={styles.dietsContainer}>
                     {filteredFilters.map((item, i) => (
                         <View key={i} style={styles.dietContainer}>
                             <DietSymbol id={item.id} height="30" />
                             <Text style={[styles.paragraph, { marginLeft: 10 }]}>{item.name}</Text>
                         </View>
                     ))}
-                </View>
+                    </View> : <View style={{height:20}} ></View>
+                }
 
                 <View style={styles.nutritionContainer}>
                     <View style={styles.nutritionItemContainer}>

@@ -14,7 +14,7 @@ const FavDishCard = props => {
                 <Text style={styles.title}>{props.name}</Text>
                 <PreparationTime time={props.time} />
                 <View style={styles.row}>
-                    <TouchableOpacity style={[styles.btn, { backgroundColor: colors.darkCard }]}>
+                    <TouchableOpacity style={[styles.btn, { backgroundColor: colors.darkCard }]} onPress={() => props.onSelectDish(props.id)}>
                         <Text style={styles.buttonText}>Read More</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => props.onRemove(props.id)}>

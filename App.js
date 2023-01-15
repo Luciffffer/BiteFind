@@ -92,6 +92,7 @@ export default function App() {
             })}
             initialParams={{
               favourites: favourites,
+              screen: 'Home'
             }}
           />
           <Tab.Screen 

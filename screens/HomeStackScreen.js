@@ -24,6 +24,7 @@ const HomeStackScreen = ({navigation, route}) => {
             headerShadowVisible: false,
             headerTitleAlign: "center",
           }}
+          initialRouteName="Home"
         >
           <HomeStack.Screen 
             name="Home" 

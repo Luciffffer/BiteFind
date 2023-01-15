@@ -58,6 +58,7 @@ const FavouritesScreen = ({navigation, route}) => {
                         time={item.preparation_time}
                         imageUrl={item.image.guid}
                         onRemove={id => onRemove(id)}
+                        onSelectDish={(selectedId) => { navigation.navigate('HomeStack', { screen: 'Details', initial: false, dishId: selectedId }) }}
                     />
                 )}
             />
