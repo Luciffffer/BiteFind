@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet } from 'react-native';
 import FilterItem from '../components/Filter';
 
 const Filters = ({setActiveFilters, filters, activeFilters}) => {
+    
     const onFilterPress = (id, active) => {
         if (active) {
             setActiveFilters((prev) => [...prev, id]);

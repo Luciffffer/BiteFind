@@ -2,6 +2,9 @@ import React, { useRef, useEffect } from "react";
 import { View, Text, StyleSheet, Animated } from "react-native";
 import { useTheme } from '@react-navigation/native';
 
+// Load screen for the details screen. It's just a little animation.
+// Animation does not actually match the load percentage, but having a little animation does improve the user experience.
+
 const LoadComponent = () => {
     const { colors } = useTheme();
     const fadeInAnimation = useRef(new Animated.Value(-300)).current;

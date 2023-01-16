@@ -23,7 +23,7 @@ const IngrOrRecipe = props => {
 
             <View style={styles.listContainer}>
                 {props.dish[showIngrOrRecipe.toLowerCase()].map((item, i) => (
-                    <View key={i} style={styles.li}>
+                    <View key={i} style={styles.li}> 
                         <Text style={styles.paragraph}>-</Text>
                         <Text style={[styles.paragraph, styles.listItem]}>{item}</Text>
                     </View>

@@ -3,6 +3,8 @@ import { useTheme } from '@react-navigation/native';
 
 import TimeIcon from '../assets/images/icons/time-icon.svg';
 
+// Just displays the symbol with the text. This same code was used in 2 places, so it's better to just put it in a component
+
 const PreparationTime = props => {
     const { colors } = useTheme();
 

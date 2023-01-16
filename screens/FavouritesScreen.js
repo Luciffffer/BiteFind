@@ -18,7 +18,7 @@ const FavouritesScreen = ({navigation, route}) => {
         return updateFavourites;
     }, [navigation])
 
-    useEffect(() => {
+    useEffect(() => { // Gets dishes with favourites id's
         if (theFavourites.length !== 0) {
             let url = 'https://lucifarian.be/wp-json/wp/v2/dishes?orderby=id&order=asc';
 
@@ -59,6 +59,8 @@ const FavouritesScreen = ({navigation, route}) => {
                         imageUrl={item.image.guid}
                         onRemove={id => onRemove(id)}
                         onSelectDish={(selectedId) => { navigation.navigate('HomeStack', { screen: 'Details', initial: false, dishId: selectedId }) }}
+                        // I am aware of the bug that when onSelectDish executes the initial homestack screen changes to that details screen permanently
+                        // I however have not found a way to fix this in time. I tried following the react navigation docs on how to not set it to initial, but this did not work.
                     />
                 )}
             />

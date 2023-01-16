@@ -9,7 +9,7 @@ import { getHeaders } from './apiHeaders';
 import HomeStackScreen from './screens/HomeStackScreen';
 import FavouritesScreen from './screens/FavouritesScreen';
 
-// SVGs
+// SVGs. Uses react-native-svg-transformer
 import HomeIcon from './assets/images/icons/home-icon.svg';
 import HeartIcon from './assets/images/icons/menu-heart-icon.svg';
 
@@ -23,7 +23,7 @@ const customFonts = {
   'Inter-Regular': require('./assets/fonts/Inter-Regular.ttf'),
 }
 
-//custom navigation theme
+//custom navigation theme. Basic colors used throughout the app.
 const MyTheme = {
   dark: false,
   colors: {
@@ -38,9 +38,9 @@ const MyTheme = {
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
-  let favourites = [];
+  let favourites = []; // Array that will contain all the favourited dishes
 
-  useEffect(() => {
+  useEffect(() => { // Loads the fonts and gets the headers used for fetch before starting app
     async function prepare() {
       try {
         await Font.loadAsync(customFonts);
@@ -61,17 +61,17 @@ export default function App() {
     }
   }, [appIsReady]);
 
-  if (!appIsReady) {
+  if (!appIsReady) {  // doesn't return anything until the app is ready
     return null;
   }
 
   return (
     <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
       <NavigationContainer theme={MyTheme} >
-        <Tab.Navigator 
+        <Tab.Navigator
           screenOptions={({ route }) => ({ 
             headerShown: false,
-            tabBarIcon: ({ color, size }) => {
+            tabBarIcon: ({ color, size }) => { // Sets the icons for the screens in the tab navigation
               if (route.name === 'HomeStack') {
                 return <HomeIcon width={size} height={size} fill={color}/>
               } else if (route.name === 'Favourites') {
@@ -91,7 +91,7 @@ export default function App() {
               title: "Home"
             })}
             initialParams={{
-              favourites: favourites,
+              favourites: favourites, // Passes the favourites array
               screen: 'Home'
             }}
           />

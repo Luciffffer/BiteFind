@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, Dimensions, TouchableHighlight, TouchableOpacity, AppRegistry } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { useTheme } from '@react-navigation/native';
-import { BoxShadow } from 'expo-react-native-shadow';
+import { BoxShadow } from 'expo-react-native-shadow'; // more customizable shadows module. Had to fix this module manually. DO NOT REINSTALL!
 
 import { headers } from '../apiHeaders';
 import LoadComponent from '../components/LoadComponent';
@@ -14,7 +14,7 @@ import CalorieIcon from '../assets/images/icons/calorie-icon.svg';
 import HeartIcon from '../assets/images/icons/heart-icon.svg';
 import MenuHeartIcon from '../assets/images/icons/menu-heart-icon.svg';
 
-const shadowStyle = {
+const shadowStyle = { // Styling used for shadow (expo-react-native-shadow)
     width: Dimensions.get('window').width,
     height: (Dimensions.get('window').width) / 130 * 100,
     color: "#172117",
@@ -28,11 +28,11 @@ const shadowStyle = {
 const DetailScreen = ({ navigation, route }) => {
     const [screenIsReady, setScreenIsReady] = useState(false);
     const [dish, setDish] = useState(null);
-    const [favourite, setFavourite] = useState(false);
+    const [favourite, setFavourite] = useState(false); // is favourite
     const { dishId, filters } = route.params;
     const { colors } = useTheme();
 
-    const filteredFilters = useMemo(() => { // not entirely happy with this
+    const filteredFilters = useMemo(() => { // not entirely happy with this, but it gets the filters for the dish
         if (dish !== null && filters !== undefined) {
             return filters.filter(filter => dish.diets.includes(filter.id));
         } else {
@@ -49,7 +49,7 @@ const DetailScreen = ({ navigation, route }) => {
             const json = await res.json();
             setDish(json);
 
-            if (route.params.favourites.includes(json.id)) {
+            if (route.params.favourites.includes(json.id)) { // sets favourite to true if dish is already in the favourites
                 setFavourite(true);
             }
         } catch (err) {
@@ -57,7 +57,7 @@ const DetailScreen = ({ navigation, route }) => {
         }
     }
 
-    const handleFavouritePress = () => {
+    const handleFavouritePress = () => { // adds/removes from favourites
         if (!favourite) {
             route.params.favourites.push(dish.id);
         } else if (favourite) {
@@ -68,7 +68,7 @@ const DetailScreen = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        navigation.setOptions({
+        navigation.setOptions({ // which favourite icon to show
             headerRight: () => {
                 if (!favourite) {
                     return (
@@ -141,7 +141,7 @@ const DetailScreen = ({ navigation, route }) => {
                     </View>
                 </View>
 
-                <IngrOrRecipe
+                <IngrOrRecipe // ingredients or recipe button and displays that part
                     dish={dish}
                     options={['Ingredients', 'Recipe']}
                 />

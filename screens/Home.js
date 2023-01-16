@@ -21,7 +21,7 @@ const HomeScreen = ({ navigation }) => {
     
     const [displaySearch, setDisplaySearch] = useState(false);
     const [searchValue, setSearchValue] = useState('');
-    const { colors } = useTheme();
+    const { colors } = useTheme(); // gets the navigation theme colors to be used in styling.
     
     const filteredDishes = useMemo(() => {
         // WP REST api has no AND operator option when you do taxonomy filter requests so dishes/diets=3+4 returns all dishes with either diet 3 or diet 4
@@ -36,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
             
     }, [dishes, activeFilters])
 
-    const getFilters = async () => {
+    const getFilters = async () => { // Gets the filters from api
         try {
             const res = await fetch('https://lucifarian.be/wp-json/wp/v2/diets?orderby=id&order=asc', {
                 "method": "GET",
@@ -49,7 +49,7 @@ const HomeScreen = ({ navigation }) => {
         }
     }
 
-    const getDishes = async () => {
+    const getDishes = async () => { // Gets dishes
         try {
             const res = await fetch('https://lucifarian.be/wp-json/wp/v2/dishes?orderby=id&order=asc', {
                 "method": "GET",
@@ -58,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
             const json = await res.json();
             setDishes(json);
 
-            const dotd = json.filter((item) => (
+            const dotd = json.filter((item) => ( // If dish of the day. It'll set it to dish of the day
                 item.is_dish_of_the_day === '1'
             ))
             setDishOfTheDay(dotd[0]);
@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation }) => {
         getFilters();
         getDishes();
 
-        navigation.setOptions({
+        navigation.setOptions({ // Makes Search icon clickable
             headerRight: () => (
                 <TouchableOpacity onPress={() => setDisplaySearch(prev => !prev)} >
                     <SearchIcon/>
@@ -120,7 +120,7 @@ const HomeScreen = ({ navigation }) => {
 
             <Text style={styles.title}>Dishes</Text>
             <FlatList //find a way to remove that damn error or another approach to doing this
-                style={{ flex: 1 }} // makes it not scrollable
+                style={{ flex: 1 }} // makes it not scrollable. So error can be ignored
                 numColumns={2}
                 columnWrapperStyle={styles.dishContainer}
                 data={filteredDishes}
