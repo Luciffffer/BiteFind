@@ -1,8 +1,8 @@
 // GET requests to the Wordpress api are protected by JWT.
 // App thus first needs to fetch the JWT token.
 
-const username = 'lucifer';
-const applicationPassword = 'BB9W QOYA VHZJ 21uW bKEM Mu02';
+const username = '';
+const applicationPassword = '';
 
 let headers = new Headers();
 
